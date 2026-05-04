@@ -1,0 +1,648 @@
+/* =========================================================
+   Butterfly 梦幻雪景版 custom.css
+   风格：柔和冬夜大图 + 白色雪花 + 蓝紫氛围 + 圆角卡片
+   ========================================================= */
+
+
+/* =========================
+   1. 全站基础氛围
+   ========================= */
+
+:root {
+  --theme-color: #8b7cf6;
+  --theme-color-light: #b8a9ff;
+  --theme-color-deep: #5d5fef;
+  --snow-blue: #eef5ff;
+  --dream-purple: #f3edff;
+  --card-radius: 22px;
+  --soft-shadow: 0 8px 28px rgba(80, 88, 180, 0.16);
+}
+
+/* 页面整体背景：淡蓝紫梦幻感 */
+body {
+  background:
+    radial-gradient(circle at 15% 10%, rgba(183, 216, 255, 0.35), transparent 30%),
+    radial-gradient(circle at 85% 20%, rgba(219, 188, 255, 0.35), transparent 28%),
+    linear-gradient(135deg, #f7fbff 0%, #f4efff 48%, #eef7ff 100%) !important;
+  background-attachment: fixed;
+}
+
+/* 页面滚动条 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #b7a8ff, #8ec5ff);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(240, 245, 255, 0.7);
+}
+
+
+/* =========================
+   2. 顶部大图区域
+   ========================= */
+
+/* 首页大图固定背景，增强沉浸感 */
+#page-header.full_page {
+  background-attachment: fixed !important;
+  background-position: center center !important;
+  background-size: cover !important;
+}
+
+/* 顶部图暗色+蓝紫渐变蒙层 */
+#page-header::before {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(31, 39, 92, 0.38) 0%,
+      rgba(86, 70, 155, 0.28) 45%,
+      rgba(30, 64, 120, 0.34) 100%
+    ) !important;
+}
+
+/* 顶部区域略微加梦幻光晕 */
+#page-header::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 30% 35%, rgba(255, 255, 255, 0.18), transparent 28%),
+    radial-gradient(circle at 75% 20%, rgba(170, 205, 255, 0.16), transparent 25%);
+  z-index: 0;
+}
+
+/* 确保标题内容在光晕上层 */
+#site-info {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+/* 网站主标题 */
+#site-title {
+  font-size: 3.1rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 4px;
+  color: #ffffff !important;
+  text-shadow:
+    0 0 10px rgba(255, 255, 255, 0.45),
+    0 0 22px rgba(142, 197, 255, 0.45),
+    0 6px 24px rgba(0, 0, 0, 0.35);
+}
+
+/* 网站副标题 */
+#site-subtitle {
+  margin-top: 0.8rem;
+  font-size: 1.15rem !important;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.92) !important;
+  text-shadow:
+    0 0 10px rgba(184, 169, 255, 0.5),
+    0 4px 16px rgba(0, 0, 0, 0.28);
+}
+
+/* 向下滚动按钮 */
+#scroll-down i {
+  font-size: 1.5rem;
+  color: #fff;
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.75);
+  animation: snowFloat 2.2s ease-in-out infinite;
+}
+
+@keyframes snowFloat {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translateY(8px);
+    opacity: 0.65;
+  }
+}
+
+
+/* =========================
+   3. 导航栏：半透明毛玻璃
+   ========================= */
+
+#nav {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+#nav.show {
+  background: rgba(255, 255, 255, 0.72) !important;
+  box-shadow: 0 6px 24px rgba(110, 120, 200, 0.14);
+}
+
+#nav a {
+  color: #ffffff;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+
+#nav.show a {
+  color: #4c4f75 !important;
+}
+
+#nav a:hover {
+  color: #9b8cff !important;
+  text-shadow: 0 0 10px rgba(155, 140, 255, 0.38);
+}
+
+
+/* =========================
+   4. 首页文章卡片
+   ========================= */
+
+#recent-posts > .recent-post-item {
+  border-radius: var(--card-radius) !important;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.76) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: var(--soft-shadow);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+/* 卡片悬浮：轻轻上浮 */
+#recent-posts > .recent-post-item:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 14px 36px rgba(111, 120, 210, 0.22);
+}
+
+/* 首页文章标题 */
+#recent-posts > .recent-post-item .recent-post-info .article-title {
+  color: #40446f;
+  font-weight: 800;
+  transition: color 0.25s ease;
+}
+
+#recent-posts > .recent-post-item .recent-post-info .article-title:hover {
+  color: #8b7cf6;
+}
+
+/* 首页文章摘要文字 */
+#recent-posts > .recent-post-item .content {
+  color: #6c708f;
+  line-height: 1.8;
+}
+
+/* 文章封面图圆润一点 */
+#recent-posts > .recent-post-item .post_cover img {
+  transition: transform 0.5s ease;
+}
+
+#recent-posts > .recent-post-item:hover .post_cover img {
+  transform: scale(1.06);
+}
+
+
+/* =========================
+   5. 侧边栏卡片
+   ========================= */
+
+.card-widget {
+  border-radius: var(--card-radius) !important;
+  background: rgba(255, 255, 255, 0.74) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: var(--soft-shadow) !important;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  overflow: hidden;
+}
+
+/* 头像更可爱 */
+.avatar-img img {
+  border-radius: 50% !important;
+  box-shadow:
+    0 0 0 5px rgba(255, 255, 255, 0.8),
+    0 0 26px rgba(155, 140, 255, 0.38);
+  transition: transform 0.35s ease;
+}
+
+.avatar-img img:hover {
+  transform: rotate(4deg) scale(1.05);
+}
+
+/* 侧边栏标题 */
+.card-widget .item-headline,
+.card-widget .card-info-data {
+  color: #555a88;
+}
+
+
+/* =========================
+   6. 文章页主体
+   ========================= */
+
+.layout > div:first-child:not(.recent-posts) {
+  border-radius: var(--card-radius) !important;
+  background: rgba(255, 255, 255, 0.78) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: var(--soft-shadow);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+}
+
+/* 文章标题 */
+#post-info .post-title {
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.28);
+}
+
+/* 正文颜色和行距 */
+#article-container {
+  color: #454866;
+  line-height: 2;
+}
+
+/* 正文小标题 */
+#article-container h1,
+#article-container h2,
+#article-container h3,
+#article-container h4 {
+  color: #4e5280;
+  font-weight: 800;
+}
+
+/* 二级标题前的小装饰 */
+#article-container h2::before {
+  background: linear-gradient(135deg, #9b8cff, #8ec5ff) !important;
+  border-radius: 50%;
+}
+
+/* 链接 */
+#article-container a {
+  color: #7e6ff2;
+  border-bottom: 1px dashed rgba(126, 111, 242, 0.45);
+}
+
+#article-container a:hover {
+  color: #5d5fef;
+  text-shadow: 0 0 8px rgba(126, 111, 242, 0.25);
+}
+
+
+/* =========================
+   7. 标签、分类、按钮
+   ========================= */
+
+/* 标签云 */
+.tag-cloud-list a {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 7px 14px;
+  margin: 6px;
+  background: rgba(255, 255, 255, 0.68);
+  box-shadow: 0 5px 16px rgba(120, 130, 210, 0.14);
+  transition: all 0.25s ease;
+}
+
+.tag-cloud-list a:hover {
+  transform: translateY(-3px);
+  background: linear-gradient(135deg, #b7a8ff, #8ec5ff);
+  color: #fff !important;
+}
+
+/* 文章标签 */
+#post .tag_share .post-meta__tags {
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(183, 168, 255, 0.18), rgba(142, 197, 255, 0.2));
+  color: #6f63d8;
+  border: 1px solid rgba(155, 140, 255, 0.25);
+}
+
+#post .tag_share .post-meta__tags:hover {
+  background: linear-gradient(135deg, #b7a8ff, #8ec5ff);
+  color: #fff;
+}
+
+/* 阅读更多按钮 */
+#recent-posts .readmore a {
+  border-radius: 999px;
+  background: linear-gradient(135deg, #9b8cff, #8ec5ff) !important;
+  color: #fff !important;
+  box-shadow: 0 6px 18px rgba(126, 111, 242, 0.28);
+  transition: all 0.25s ease;
+}
+
+#recent-posts .readmore a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(126, 111, 242, 0.36);
+}
+
+
+/* =========================
+   8. 代码块和引用块
+   ========================= */
+
+blockquote {
+  border-left: 4px solid #9b8cff !important;
+  background: rgba(245, 241, 255, 0.78) !important;
+  border-radius: 0 16px 16px 0;
+  color: #5b5f86;
+}
+
+/* 行内代码 */
+#article-container code {
+  color: #7b65e8;
+  background: rgba(235, 229, 255, 0.75);
+  border-radius: 6px;
+  padding: 2px 6px;
+}
+
+/* 代码块整体圆角 */
+figure.highlight,
+pre {
+  border-radius: 16px !important;
+}
+
+
+/* =========================
+   9. 页脚
+   ========================= */
+
+#footer {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(62, 70, 140, 0.85),
+      rgba(94, 80, 160, 0.8)
+    ) !important;
+  backdrop-filter: blur(10px);
+}
+
+#footer,
+#footer a {
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+
+#footer a:hover {
+  color: #ffffff !important;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+}
+
+
+/* =========================
+   10. 右下角按钮
+   ========================= */
+
+#rightside > div > button,
+#rightside > div > a {
+  border-radius: 14px !important;
+  background: rgba(255, 255, 255, 0.78) !important;
+  color: #6d63d9 !important;
+  box-shadow: 0 6px 18px rgba(110, 120, 200, 0.18);
+  backdrop-filter: blur(10px);
+}
+
+#rightside > div > button:hover,
+#rightside > div > a:hover {
+  background: linear-gradient(135deg, #b7a8ff, #8ec5ff) !important;
+  color: #fff !important;
+}
+
+
+/* =========================
+   11. 雪花 canvas 层
+   ========================= */
+
+#snow-canvas {
+  pointer-events: none !important;
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  z-index: 9999 !important;
+}
+
+
+/* =========================
+   12. 移动端适配
+   ========================= */
+
+@media screen and (max-width: 768px) {
+  #site-title {
+    font-size: 2.15rem !important;
+    letter-spacing: 2px;
+  }
+
+  #site-subtitle {
+    font-size: 0.95rem !important;
+  }
+
+  #recent-posts > .recent-post-item,
+  .card-widget,
+  .layout > div:first-child:not(.recent-posts) {
+    border-radius: 18px !important;
+  }
+
+  body {
+    background:
+      linear-gradient(135deg, #f8fbff 0%, #f5f0ff 50%, #eff8ff 100%) !important;
+  }
+}
+
+
+/* =========================
+   13. 暗色模式适配
+   ========================= */
+
+[data-theme='dark'] body {
+  background:
+    radial-gradient(circle at 15% 10%, rgba(77, 92, 160, 0.28), transparent 30%),
+    radial-gradient(circle at 85% 20%, rgba(105, 70, 150, 0.26), transparent 28%),
+    linear-gradient(135deg, #151827 0%, #1c1830 48%, #111d2e 100%) !important;
+}
+
+[data-theme='dark'] #recent-posts > .recent-post-item,
+[data-theme='dark'] .card-widget,
+[data-theme='dark'] .layout > div:first-child:not(.recent-posts) {
+  background: rgba(30, 34, 56, 0.78) !important;
+  border: 1px solid rgba(180, 190, 255, 0.12);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.28);
+}
+
+[data-theme='dark'] #article-container,
+[data-theme='dark'] #recent-posts > .recent-post-item .content {
+  color: #d7dbf5;
+}
+
+[data-theme='dark'] #recent-posts > .recent-post-item .recent-post-info .article-title,
+[data-theme='dark'] #article-container h1,
+[data-theme='dark'] #article-container h2,
+[data-theme='dark'] #article-container h3,
+[data-theme='dark'] #article-container h4 {
+  color: #eef2ff;
+}
+
+[data-theme='dark'] blockquote {
+  background: rgba(65, 58, 105, 0.45) !important;
+  color: #dcdffd;
+}
+
+[data-theme='dark'] #nav.show {
+  background: rgba(30, 34, 56, 0.76) !important;
+}
+
+[data-theme='dark'] #nav.show a {
+  color: #eef2ff !important;
+}
+
+/* 顶部大图容器 */
+#page-header {
+  position: relative;
+  overflow: hidden;
+}
+
+/* 雪花只存在于顶部大图区域 */
+#snow-canvas {
+  position: absolute !important;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1 !important;
+  pointer-events: none !important;
+}
+
+/* 确保标题文字在雪花上面 */
+#site-info {
+  position: relative;
+  z-index: 2;
+}
+
+/* 如果导航栏压在顶部图上，也放更上层 */
+#nav {
+  position: relative;
+  z-index: 3;
+}
+
+/* -----------------------------
+   顶部大图头像 + 名字 + 标签
+   ----------------------------- */
+
+/* 顶部大图整体居中 */
+#page-header.full_page #site-info {
+  position: absolute; /* 使用绝对定位实现上下居中 */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 5;
+}
+
+/* 头像 */
+.custom-hero-avatar {
+  width: 132px;
+  height: 132px;
+  border-radius: 50%;
+  padding: 4px;
+  background: rgba(180,150,255,0.45); /* 去掉背景色块 */
+  box-shadow:
+    0 0 0 3px rgba(255,255,255,0.6), /* 细白色边框 */
+    0 0 24px rgba(180,150,255,0.45), /* 主光晕 */
+    0 0 38px rgba(142,197,255,0.35); /* 次级光晕 */
+  margin-bottom: 1.8rem;
+  animation: heroAvatarFloat 4s ease-in-out infinite;
+}
+
+.custom-hero-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* 头像漂浮动画 */
+@keyframes heroAvatarFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* 名字文字，去掉背景色块，用文字阴影 */
+#page-header.full_page #site-title {
+  margin-top: 0;
+  font-size: 3rem !important;
+  font-weight: 900;
+  font-style: italic;
+  color: #fff;
+  text-shadow: 
+    0 0 6px rgba(255,255,255,0.6),
+    0 0 12px rgba(142,197,255,0.45),
+    0 4px 18px rgba(0,0,0,0.3);
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+/* 细分割线，去掉色块，仅作为视觉分隔 */
+.custom-hero-divider {
+  width: min(520px, 68vw);
+  height: 1px;
+  margin: 1rem auto 1.2rem;
+  background: rgba(255,255,255,0.35);
+}
+
+/* 打字机文字标签语 */
+.custom-hero-typewriter {
+  min-height: 28px;
+  font-size: 1rem;
+  font-weight: 400;
+  color: #fff;
+  text-shadow:
+    0 0 6px rgba(255,255,255,0.5),
+    0 0 12px rgba(142,197,255,0.35);
+  text-align: center;
+  font-family: 'Comic Sans MS', '青鸟华光简美黑', 'PingFang SC', sans-serif;
+}
+
+/* 打字机光标 */
+.hero-cursor {
+  margin-left: 3px;
+  font-weight: 500;
+  animation: heroCursorBlink 0.85s infinite;
+}
+
+@keyframes heroCursorBlink {
+  0%, 45% { opacity: 1; }
+  46%, 100% { opacity: 0; }
+}
+
+/* 雪花保持在顶部大图层，不遮挡内容 */
+#page-header.full_page #snow-canvas {
+  z-index: 2 !important;
+  pointer-events: none;
+}
+
+/* 手机端适配 */
+@media screen and (max-width: 768px) {
+  .custom-hero-avatar {
+    width: 96px;
+    height: 96px;
+    margin-bottom: 1.4rem;
+  }
+
+  #page-header.full_page #site-title {
+    font-size: 2.2rem !important;
+  }
+
+  .custom-hero-divider {
+    width: 72vw;
+    margin: 0.9rem auto 1rem;
+  }
+
+  .custom-hero-typewriter {
+    font-size: 0.9rem;
+    max-width: 82vw;
+    line-height: 1.6;
+  }
+}

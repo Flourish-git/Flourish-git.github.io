@@ -16,6 +16,14 @@
   --dream-purple: #f3edff;
   --card-radius: 22px;
   --soft-shadow: 0 8px 28px rgba(80, 88, 180, 0.16);
+
+  --fl-nav-text: #2f4968;
+  --fl-nav-active-start: #8f8cff;
+  --fl-nav-active-end: #20d2c7;
+  --fl-nav-radius: 14px;
+  --fl-nav-height: 35px;
+  --fl-nav-shadow: 0 8px 18px rgba(32, 210, 199, 0.24),
+                   0 0 16px rgba(143, 140, 255, 0.22);
 }
 
 /* 页面整体背景：淡蓝紫梦幻感 */
@@ -124,36 +132,6 @@ body {
     transform: translateY(8px);
     opacity: 0.65;
   }
-}
-
-
-/* =========================
-   3. 导航栏：半透明毛玻璃
-   ========================= */
-
-#nav {
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-#nav.show {
-  background: rgba(255, 255, 255, 0.72) !important;
-  box-shadow: 0 6px 24px rgba(110, 120, 200, 0.14);
-}
-
-#nav a {
-  color: #ffffff;
-  font-weight: 600;
-  transition: all 0.25s ease;
-}
-
-#nav.show a {
-  color: #4c4f75 !important;
-}
-
-#nav a:hover {
-  color: #9b8cff !important;
-  text-shadow: 0 0 10px rgba(155, 140, 255, 0.38);
 }
 
 
@@ -411,20 +389,6 @@ pre {
   color: #fff !important;
 }
 
-
-/* =========================
-   11. 雪花 canvas 层
-   ========================= */
-
-#snow-canvas {
-  pointer-events: none !important;
-  position: fixed !important;
-  top: 0;
-  left: 0;
-  z-index: 9999 !important;
-}
-
-
 /* =========================
    12. 移动端适配
    ========================= */
@@ -511,18 +475,6 @@ pre {
   height: 100%;
   z-index: 1 !important;
   pointer-events: none !important;
-}
-
-/* 确保标题文字在雪花上面 */
-#site-info {
-  position: relative;
-  z-index: 2;
-}
-
-/* 如果导航栏压在顶部图上，也放更上层 */
-#nav {
-  position: relative;
-  z-index: 3;
 }
 
 /* -----------------------------
@@ -645,4 +597,622 @@ pre {
     max-width: 82vw;
     line-height: 1.6;
   }
+}
+
+/* =========================================================
+   搜索弹窗：梦幻雪景毛玻璃版
+   ========================================================= */
+
+/* 弹窗外层遮罩 */
+#local-search .search-dialog,
+.search-dialog {
+  width: min(760px, 88vw) !important;
+  left: 45% !important;
+  border-radius: 28px !important;
+  padding: 28px 30px 26px !important;
+
+  background:
+    radial-gradient(circle at 12% 8%, rgba(183, 216, 255, 0.32), transparent 28%),
+    radial-gradient(circle at 88% 18%, rgba(206, 180, 255, 0.30), transparent 26%),
+    rgba(255, 255, 255, 0.82) !important;
+
+  backdrop-filter: blur(22px) saturate(1.2);
+  -webkit-backdrop-filter: blur(22px) saturate(1.2);
+
+  border: 1px solid rgba(255, 255, 255, 0.72) !important;
+
+  box-shadow:
+    0 22px 60px rgba(32, 38, 92, 0.26),
+    0 0 36px rgba(142, 197, 255, 0.20),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.42);
+}
+
+/* 搜索标题 */
+.search-dialog .search-title,
+#local-search .search-dialog .search-title {
+  display: none !important;
+}
+
+/* 关闭按钮 */
+.search-dialog .search-close-button,
+#local-search .search-dialog .search-close-button {
+  display: none !important;
+}
+
+#local-search .search-dialog,
+.search-dialog {
+  padding-top: 24px !important;
+}
+
+/* 搜索框顶部不要额外留空 */
+.search-dialog .search-box,
+#local-search .search-dialog .search-box {
+  margin-top: 0 !important;
+}
+
+/* 搜索输入框 */
+.search-dialog .search-box input,
+#local-search .search-dialog .search-box input {
+  height: 60px !important;
+  border-radius: 999px !important;
+  padding: 0 18px !important;
+
+  color: #3d4568 !important;
+  font-weight: 600;
+
+  background: rgba(255, 255, 255, 0.78) !important;
+  border: 2px solid rgba(95, 174, 255, 0.75) !important;
+
+  box-shadow:
+    0 6px 18px rgba(95, 174, 255, 0.14),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.65);
+
+  outline: none !important;
+  transition: all 0.25s ease;
+}
+
+/* 输入框聚焦 */
+.search-dialog .search-box input:focus,
+#local-search .search-dialog .search-box input:focus {
+  border-color: rgba(143, 140, 255, 0.9) !important;
+  box-shadow:
+    0 0 0 4px rgba(143, 140, 255, 0.15),
+    0 10px 26px rgba(95, 174, 255, 0.22),
+    0 0 18px rgba(32, 210, 199, 0.16);
+}
+
+/* 输入框 placeholder */
+.search-dialog .search-box input::placeholder,
+#local-search .search-dialog .search-box input::placeholder {
+  color: rgba(80, 86, 120, 0.58);
+}
+
+/* 去掉原本突兀的剪刀虚线分割线 */
+.search-dialog .search-hr,
+#local-search .search-dialog .search-hr {
+  display: none !important;
+}
+
+/* 搜索结果区域 */
+.search-dialog .search-result-list,
+#local-search .search-dialog .search-result-list {
+  max-height: 52vh;
+  padding: 0 !important;
+  margin-top: 12px !important;
+}
+
+/* 单条搜索结果 */
+.search-dialog .search-result-list li,
+#local-search .search-dialog .search-result-list li {
+  list-style: none !important;
+  margin: 10px 0 !important;
+  padding: 14px 16px !important;
+
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.56);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+
+  transition: all 0.22s ease;
+}
+
+/* 搜索结果 hover */
+.search-dialog .search-result-list li:hover,
+#local-search .search-dialog .search-result-list li:hover {
+  transform: translateY(-3px);
+  background:
+    linear-gradient(135deg, rgba(243, 239, 255, 0.86), rgba(235, 249, 255, 0.88));
+}
+
+/* 搜索结果标题 */
+.search-dialog .search-result-title,
+#local-search .search-dialog .search-result-title {
+  color: #6d79d1 !important;
+  font-weight: 900 !important;
+  font-size: 1rem;
+  border-bottom: none !important;
+}
+
+.search-dialog .search-result-title:hover,
+#local-search .search-dialog .search-result-title:hover {
+  color: #20bfb8 !important;
+}
+
+/* 搜索结果摘要 */
+.search-dialog .search-result,
+#local-search .search-dialog .search-result {
+  color: #555d79 !important;
+  line-height: 1.8;
+}
+
+/* 高亮关键词 */
+.search-dialog .search-keyword,
+#local-search .search-dialog .search-keyword {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #8f8cff, #20d2c7) !important;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-weight: 800;
+}
+
+/* 未找到结果提示 */
+.search-dialog .search-result-list .no-result,
+#local-search .search-dialog .search-result-list .no-result,
+.search-dialog .search-result-list p,
+#local-search .search-dialog .search-result-list p {
+  color: #606782 !important;
+  font-weight: 600;
+}
+
+/* =========================================================
+   A. 左侧 Flourish / 站点名美化
+   兼容 Butterfly 常见结构：#blog_name、#blog-info、#site-name
+   ========================================================= */
+
+#nav #blog_name,
+#nav #blog-info {
+  display: flex !important;
+  align-items: center !important;
+}
+
+#nav #blog_name a,
+#nav #blog-info a,
+#nav #blog-info #site-name,
+#nav a#site-name,
+#nav #site-name,
+#blog_name a,
+#site-name {
+  display: inline-block !important;
+  position: relative !important;
+
+  font-size: 1.55rem !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+  font-style: italic !important;
+  letter-spacing: 0.8px !important;
+  font-family: "Shadows Into Light", "Poppins", "Segoe UI", Arial, sans-serif !important;
+
+  background-image: linear-gradient(135deg, #546cff 0%, #8f8cff 46%, #20cfc5 100%) !important;
+  background-size: 100% 100% !important;
+  background-repeat: no-repeat !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+
+  text-shadow: none !important;
+  filter: none !important;
+
+  transition: transform 0.25s ease, filter 0.25s ease !important;
+}
+
+/* Logo 底部细光线 */
+#nav #blog_name a::after,
+#nav #blog-info a::after,
+#nav #blog-info #site-name::after,
+#nav a#site-name::after,
+#nav #site-name::after,
+#blog_name a::after,
+#site-name::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 8% !important;
+  right: 8% !important;
+  bottom: -8px !important;
+  height: 3px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(90deg, transparent, rgba(143, 140, 255, 0.75), rgba(32, 210, 199, 0.75), transparent) !important;
+  opacity: 0.7 !important;
+  transform: scaleX(0.86) !important;
+  transition: all 0.25s ease !important;
+}
+
+#nav #blog_name a:hover,
+#nav #blog-info a:hover,
+#nav #blog-info #site-name:hover,
+#nav a#site-name:hover,
+#nav #site-name:hover,
+#blog_name a:hover,
+#site-name:hover {
+  transform: translateY(-1px) !important;
+  filter: none !important;
+}
+
+#nav #blog_name a:hover::after,
+#nav #blog-info a:hover::after,
+#nav #blog-info #site-name:hover::after,
+#nav a#site-name:hover::after,
+#nav #site-name:hover::after,
+#blog_name a:hover::after,
+#site-name:hover::after {
+  opacity: 1 !important;
+  transform: scaleX(1) !important;
+}
+
+/* =========================================================
+   B. 普通菜单项统一样式：首页 / 标签 / 播客记录
+   ========================================================= */
+
+#nav .menus_items .menus_item > a,
+#nav .menus_items .menus_item > a.site-page {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+
+  height: var(--fl-nav-height) !important;
+  padding: 0 16px !important;
+  margin: 0 5px !important;
+  border-radius: var(--fl-nav-radius) !important;
+
+  color: var(--fl-nav-text) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+
+  font-weight: 800 !important;
+  letter-spacing: 0.5px !important;
+  line-height: var(--fl-nav-height) !important;
+  text-shadow: none !important;
+
+  transition: all 0.25s ease !important;
+}
+
+#nav .menus_items .menus_item > a i,
+#nav .menus_items .menus_item > a.site-page i {
+  margin-right: 2px !important;
+  color: inherit !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  transition: transform 0.25s ease !important;
+}
+
+/* 菜单项 hover / 当前页面 active */
+#nav .menus_items .menus_item > a:hover,
+#nav .menus_items .menus_item > a.site-page:hover,
+#nav .menus_items .menus_item > a.active,
+#nav .menus_items .menus_item > a.site-page.active {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, var(--fl-nav-active-start) 0%, var(--fl-nav-active-end) 100%) !important;
+  box-shadow: var(--fl-nav-shadow) !important;
+  transform: translateY(-2px) !important;
+  text-decoration: none !important;
+}
+
+#nav .menus_items .menus_item > a:hover i,
+#nav .menus_items .menus_item > a.site-page:hover i,
+#nav .menus_items .menus_item > a.active i,
+#nav .menus_items .menus_item > a.site-page.active i {
+  color: #ffffff !important;
+  transform: scale(1.08) !important;
+}
+
+/* =========================================================
+   C. 搜索按钮：与普通菜单项完全统一
+   默认无背景；hover / focus / 打开搜索时才高亮
+   ========================================================= */
+
+#nav #search-button {
+  margin-left: 2px !important;
+  margin-right: 2px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* 搜索按钮默认状态 */
+#nav #search-button > a,
+#nav #search-button > a.site-page,
+#nav #search-button .site-page,
+#nav #search-button .search,
+#nav #search-button .search span {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 2px !important;
+
+  height: var(--fl-nav-height) !important;
+  min-height: var(--fl-nav-height) !important;
+  padding: 0 16px !important;
+  margin: 0 !important;
+  border-radius: var(--fl-nav-radius) !important;
+
+  color: var(--fl-nav-text) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+
+  font-weight: 800 !important;
+  letter-spacing: 0.5px !important;
+  line-height: var(--fl-nav-height) !important;
+  text-shadow: none !important;
+
+  transition: all 0.25s ease !important;
+}
+
+/* 搜索按钮内部元素不要再单独套一层按钮效果 */
+#nav #search-button > a *,
+#nav #search-button > a.site-page *,
+#nav #search-button .site-page *,
+#nav #search-button .search *,
+#nav #search-button .search span *,
+#nav #search-button i,
+#nav #search-button span {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  color: inherit !important;
+  text-shadow: none !important;
+}
+
+#nav #search-button i {
+  margin-right: 2px !important;
+  font-size: 1em !important;
+}
+
+/* 搜索按钮 hover / focus / active / 搜索弹窗打开时：与首页 active 一致 */
+#nav #search-button:hover > a,
+#nav #search-button:hover > a.site-page,
+#nav #search-button:hover .site-page,
+#nav #search-button > a:hover,
+#nav #search-button > a.site-page:hover,
+#nav #search-button .site-page:hover,
+#nav #search-button > a:focus,
+#nav #search-button > a.site-page:focus,
+#nav #search-button .site-page:focus,
+#nav #search-button > a:active,
+#nav #search-button > a.site-page:active,
+#nav #search-button .site-page:active,
+#nav #search-button.open > a,
+#nav #search-button.open .site-page,
+#nav #search-button.search-open > a,
+#nav #search-button.search-open .site-page {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, var(--fl-nav-active-start) 0%, var(--fl-nav-active-end) 100%) !important;
+  box-shadow: var(--fl-nav-shadow) !important;
+  transform: translateY(-2px) !important;
+}
+
+#nav #search-button:hover *,
+#nav #search-button > a:hover *,
+#nav #search-button .site-page:hover *,
+#nav #search-button.open *,
+#nav #search-button.search-open * {
+  color: #ffffff !important;
+}
+
+/* 如果之前用 ::after 强行加过“搜索”，这里统一关闭，避免重复文字 */
+#nav #search-button .site-page::after,
+#nav #search-button > a::after {
+  content: none !important;
+}
+
+/* 再次兜底：非 hover / 非 open 时强制透明，避免看起来一直被选中 */
+#nav #search-button:not(:hover):not(.open):not(.search-open) > a,
+#nav #search-button:not(:hover):not(.open):not(.search-open) > a.site-page,
+#nav #search-button:not(:hover):not(.open):not(.search-open) .site-page {
+  color: var(--fl-nav-text) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* =========================================================
+   D. 导航栏整体状态微调
+   ========================================================= */
+
+#nav {
+  position: relative !important;
+  z-index: 3 !important;
+  padding: 0 18px !important;
+  border-radius: 0 0 22px 22px !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+}
+
+#nav.show {
+  background: rgba(245, 240, 255, 0.72) !important;
+  box-shadow: 0 8px 28px rgba(90, 95, 160, 0.14) !important;
+}
+
+#page-header:not(.not-top-img) #nav a,
+#nav.show a {
+  text-shadow: none !important;
+}
+
+@media screen and (max-width: 768px) {
+  :root {
+    --fl-nav-height: 38px;
+  }
+
+  #nav {
+    border-radius: 0 !important;
+  }
+
+  #nav #blog_name a,
+  #nav #blog-info a,
+  #nav #blog-info #site-name,
+  #nav a#site-name,
+  #nav #site-name,
+  #blog_name a,
+  #site-name {
+    font-size: 1.25rem !important;
+  }
+
+  #nav .menus_items .menus_item > a,
+  #nav #search-button > a,
+  #nav #search-button .site-page {
+    padding: 0 12px !important;
+  }
+}
+
+/* 暗色模式适配 */
+[data-theme='dark'] .search-dialog,
+[data-theme='dark'] #local-search .search-dialog {
+  background:
+    radial-gradient(circle at 12% 8%, rgba(95, 174, 255, 0.18), transparent 30%),
+    radial-gradient(circle at 88% 18%, rgba(143, 140, 255, 0.20), transparent 28%),
+    rgba(28, 31, 52, 0.86) !important;
+
+  border: 1px solid rgba(180, 190, 255, 0.16) !important;
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.38),
+    0 0 30px rgba(95, 174, 255, 0.12);
+}
+
+[data-theme='dark'] .search-dialog .search-box input,
+[data-theme='dark'] #local-search .search-dialog .search-box input {
+  color: #eef2ff !important;
+  background: rgba(35, 39, 66, 0.78) !important;
+  border-color: rgba(143, 140, 255, 0.62) !important;
+}
+
+[data-theme='dark'] .search-dialog .search-result-list li,
+[data-theme='dark'] #local-search .search-dialog .search-result-list li {
+  background: rgba(38, 42, 70, 0.68);
+  border-color: rgba(180, 190, 255, 0.12);
+}
+
+[data-theme='dark'] .search-dialog .search-result,
+[data-theme='dark'] #local-search .search-dialog .search-result {
+  color: #d7dbf5 !important;
+}
+
+/* 让搜索结果卡片有平滑过渡 */
+[data-theme='dark'] .search-dialog .search-result-list li,
+[data-theme='dark'] #local-search .search-dialog .search-result-list li {
+  transition:
+    transform 0.22s ease,
+    background 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease !important;
+}
+
+/* 鼠标悬浮时：结果卡片轻微上浮 + 梦幻渐变背景 */
+[data-theme='dark'] .search-dialog .search-result-list li:hover,
+[data-theme='dark'] #local-search .search-dialog .search-result-list li:hover {
+  transform: translateY(-1px) !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(95, 174, 255, 0.24) 0%,
+      rgba(143, 140, 255, 0.30) 48%,
+      rgba(32, 210, 199, 0.20) 100%
+    ) !important;
+
+  border-color: rgba(180, 190, 255, 0.28) !important;
+
+  box-shadow: none !important;
+}
+
+[data-theme='dark'] .search-dialog .search-result-title,
+[data-theme='dark'] #local-search .search-dialog .search-result-title {
+  color: #d2d3d7 !important;
+  font-weight: 900 !important;
+  font-size: 1rem;
+  border-bottom: none !important;
+}
+
+/* 鼠标悬浮时：标题变亮，不加发光 */
+[data-theme='dark'] .search-dialog .search-result-list li:hover .search-result-title,
+[data-theme='dark'] #local-search .search-dialog .search-result-list li:hover .search-result-title {
+  color: #9fd8ff !important;
+  text-shadow: none !important;
+}
+
+/* 鼠标悬浮时：摘要文字略微提亮 */
+[data-theme='dark'] .search-dialog .search-result-list li:hover .search-result,
+[data-theme='dark'] #local-search .search-dialog .search-result-list li:hover .search-result {
+  color: #eef2ff !important;
+}
+
+/* 暗色模式下：普通菜单文字和图标颜色 */
+[data-theme='dark'] #nav .menus_items .menus_item > a,
+[data-theme='dark'] #nav .menus_items .menus_item > a.site-page,
+[data-theme='dark'] #nav #search-button > a,
+[data-theme='dark'] #nav #search-button .site-page {
+  color: #dbeafe !important;
+  opacity: 1 !important;
+}
+
+/* 暗色模式下：菜单图标颜色 */
+[data-theme='dark'] #nav .menus_items .menus_item > a i,
+[data-theme='dark'] #nav .menus_items .menus_item > a.site-page i,
+[data-theme='dark'] #nav #search-button i {
+  color: #93c5fd !important;
+  opacity: 1 !important;
+}
+
+/* hover 时图标一起变亮 */
+[data-theme='dark'] #nav .menus_items .menus_item > a:hover i,
+[data-theme='dark'] #nav .menus_items .menus_item > a.site-page:hover i,
+[data-theme='dark'] #nav #search-button > a:hover i,
+[data-theme='dark'] #nav #search-button .site-page:hover i {
+  color: #ffffff !important;
+}
+
+/* 暗色模式下，搜索按钮默认状态也保持浅色 */
+[data-theme='dark'] #nav #search-button:not(:hover):not(.open):not(.search-open) > a,
+[data-theme='dark'] #nav #search-button:not(:hover):not(.open):not(.search-open) > a.site-page,
+[data-theme='dark'] #nav #search-button:not(:hover):not(.open):not(.search-open) .site-page,
+[data-theme='dark'] #nav #search-button:not(:hover):not(.open):not(.search-open) .search,
+[data-theme='dark'] #nav #search-button:not(:hover):not(.open):not(.search-open) .search span {
+  color: #dbeafe !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  transform: none !important;
+  opacity: 1 !important;
+}
+
+/* 暗色模式下，搜索图标单独提亮 */
+[data-theme='dark'] #nav #search-button:not(:hover):not(.open):not(.search-open) i {
+  color: #93c5fd !important;
+  opacity: 1 !important;
+}
+
+/* 暗色模式下，搜索文字单独提亮 */
+[data-theme='dark'] #nav #search-button:not(:hover):not(.open):not(.search-open) span {
+  color: #dbeafe !important;
+  opacity: 1 !important;
+}
+
+/* 暗色模式下：当前页面 active 高亮 */
+[data-theme='dark'] #nav .menus_items .menus_item > a.active,
+[data-theme='dark'] #nav .menus_items .menus_item > a.site-page.active {
+  color: #ffffff !important;
+  background: linear-gradient(
+    135deg,
+    rgba(95, 174, 255, 0.42) 0%,
+    rgba(143, 140, 255, 0.50) 50%,
+    rgba(32, 210, 199, 0.36) 100%
+  ) !important;
+  box-shadow:
+    0 8px 20px rgba(95, 174, 255, 0.22),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.14) !important;
+}
+
+/* active 状态下图标变亮 */
+[data-theme='dark'] #nav .menus_items .menus_item > a.active i,
+[data-theme='dark'] #nav .menus_items .menus_item > a.site-page.active i {
+  color: #ffffff !important;
 }

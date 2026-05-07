@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+  
+    
+    <entry>
+      <title>Vol.01 Hexo创建个人博客</title>
+      <link href="/2026/05/04/hello-world/"/>
+      <url>/2026/05/04/hello-world/</url>
+      
+        <content type="html"><![CDATA[<h2 id="基本信息"><a href="#基本信息" class="headerlink" title="基本信息"></a>基本信息</h2><ul><li>播客名称：</li><li>本期标题：</li><li>收听日期：</li><li>主持人：</li><li>嘉宾：</li><li>原始链接：</li><li>推荐指数：★★★★☆</li></ul><h2 id="一句话总结"><a href="#一句话总结" class="headerlink" title="一句话总结"></a>一句话总结</h2><p>这一期主要讲了……</p><h2 id="内容摘要"><a href="#内容摘要" class="headerlink" title="内容摘要"></a>内容摘要</h2><p>这里写 300 到 500 字左右的摘要。</p><h2 id="重要观点"><a href="#重要观点" class="headerlink" title="重要观点"></a>重要观点</h2><p>1.<br>2.<br>3. </p><h2 id="我的思考"><a href="#我的思考" class="headerlink" title="我的思考"></a>我的思考</h2><p>这里写你听完之后的想法、启发、疑问。</p><h2 id="相关资料"><a href="#相关资料" class="headerlink" title="相关资料"></a>相关资料</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 播客记录 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 成长 </tag>
+            
+            <tag> 科技 </tag>
+            
+            <tag> 生活方式 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
+</search>

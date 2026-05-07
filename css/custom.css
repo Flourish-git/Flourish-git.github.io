@@ -628,9 +628,26 @@ pre {
 }
 
 /* 搜索标题 */
-.search-dialog .search-title,
-#local-search .search-dialog .search-title {
-  display: none !important;
+#local-search .search-title,
+.search-dialog .search-title {
+  margin-bottom: 16px !important;
+
+  font-family:
+    "Comic Sans MS",
+    "Trebuchet MS",
+    "Microsoft YaHei",
+    "微软雅黑",
+    "PingFang SC",
+    "Noto Sans SC",
+    sans-serif !important;
+  font-size: 1.5rem !important;
+  font-weight: 1000 !important;
+  letter-spacing: 1px !important;
+
+  color: #326cc3 !important;
+  text-shadow:
+    0 0 8px rgba(63, 141, 255, 0.30),
+    0 0 16px rgba(142, 124, 246, 0.20) !important;
 }
 
 /* 关闭按钮 */
@@ -688,6 +705,8 @@ pre {
 }
 
 /* 去掉原本突兀的剪刀虚线分割线 */
+.search-dialog hr,
+#local-search .search-dialog hr,
 .search-dialog .search-hr,
 #local-search .search-dialog .search-hr {
   display: none !important;

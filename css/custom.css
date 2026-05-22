@@ -240,7 +240,31 @@ body {
 /* 正文颜色和行距 */
 #article-container {
   color: #454866;
-  line-height: 2;
+  line-height: 1.9;
+}
+
+/* 文章正文排版优化 */
+#article-container p,
+#article-container li,
+#article-container td,
+#article-container th,
+#article-container blockquote {
+  font-family: "Times New Roman", "Noto Serif SC", "Songti SC", "SimSun", serif;
+  text-align: justify;
+  text-justify: inter-ideograph;
+  text-align-last: left;
+}
+
+/* 代码块样式 */
+#article-container code,
+#article-container pre {
+  font-family: Consolas, Monaco, "Courier New", monospace;
+  text-align: left;
+}
+
+/* 表格左对齐 */
+#article-container table {
+  text-align: left;
 }
 
 /* 正文小标题 */
@@ -786,49 +810,64 @@ pre {
    A. 左侧 Flourish / 站点名美化
    兼容 Butterfly 常见结构：#blog_name、#blog-info、#site-name
    ========================================================= */
-
+/* ===== 导航容器 ===== */
 #nav #blog_name,
 #nav #blog-info {
   display: flex !important;
   align-items: center !important;
 }
 
+/* ===== 站点名通用样式：默认浅色模式为白色 ===== */
 #nav #blog_name a,
 #nav #blog-info a,
-#nav #blog-info #site-name,
-#nav a#site-name,
 #nav #site-name,
 #blog_name a,
 #site-name {
   display: inline-block !important;
   position: relative !important;
 
-  font-size: 1.55rem !important;
-  line-height: 1 !important;
-  font-weight: 900 !important;
-  font-style: italic !important;
-  letter-spacing: 0.8px !important;
-  font-family: "Shadows Into Light", "Poppins", "Segoe UI", Arial, sans-serif !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  max-width: none !important;
 
-  background-image: linear-gradient(135deg, #546cff 0%, #8f8cff 46%, #20cfc5 100%) !important;
-  background-size: 100% 100% !important;
-  background-repeat: no-repeat !important;
-  -webkit-background-clip: text !important;
+  font-family: "Shadows Into Light", "Poppins", "Segoe UI",
+               "Source Han Serif SC", "Noto Serif SC", "思源宋体", "SimSun", serif !important;
+  font-size: 1.45rem !important;
+  font-weight: 600 !important;
+  font-style: italic !important;
+  line-height: 1.25 !important;
+  letter-spacing: 0.8px !important;
+
+  color: #ffffff !important;
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+  -webkit-text-fill-color: #ffffff !important;
+
+  text-shadow: 0 1px 4px rgba(60, 80, 160, 0.25) !important;
+  filter: none !important;
+  transition: transform 0.25s ease, opacity 0.25s ease !important;
+}
+
+/* ===== Dark 模式：站点名改为渐变色 ===== */
+html[data-theme="dark"] #nav #blog_name a,
+html[data-theme="dark"] #nav #blog-info a,
+html[data-theme="dark"] #nav #site-name,
+html[data-theme="dark"] #blog_name a,
+html[data-theme="dark"] #site-name {
+  background: linear-gradient(135deg, #546cff 0%, #8f8cff 46%, #20cfc5 100%) !important;
   background-clip: text !important;
+  -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   color: transparent !important;
 
   text-shadow: none !important;
-  filter: none !important;
-
-  transition: transform 0.25s ease, filter 0.25s ease !important;
 }
 
-/* Logo 底部细光线 */
+/* ===== 底部细光线：默认模式 ===== */
 #nav #blog_name a::after,
 #nav #blog-info a::after,
-#nav #blog-info #site-name::after,
-#nav a#site-name::after,
 #nav #site-name::after,
 #blog_name a::after,
 #site-name::after {
@@ -839,27 +878,46 @@ pre {
   bottom: -8px !important;
   height: 3px !important;
   border-radius: 999px !important;
-  background: linear-gradient(90deg, transparent, rgba(143, 140, 255, 0.75), rgba(32, 210, 199, 0.75), transparent) !important;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.75),
+    rgba(255, 255, 255, 0.95),
+    transparent
+  ) !important;
+
   opacity: 0.7 !important;
   transform: scaleX(0.86) !important;
   transition: all 0.25s ease !important;
 }
 
+/* ===== Dark 模式：底部细光线改为渐变色 ===== */
+html[data-theme="dark"] #nav #blog_name a::after,
+html[data-theme="dark"] #nav #blog-info a::after,
+html[data-theme="dark"] #nav #site-name::after,
+html[data-theme="dark"] #blog_name a::after,
+html[data-theme="dark"] #site-name::after {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(143, 140, 255, 0.75),
+    rgba(32, 210, 199, 0.75),
+    transparent
+  ) !important;
+}
+
+/* ===== Hover 效果 ===== */
 #nav #blog_name a:hover,
 #nav #blog-info a:hover,
-#nav #blog-info #site-name:hover,
-#nav a#site-name:hover,
 #nav #site-name:hover,
 #blog_name a:hover,
 #site-name:hover {
   transform: translateY(-1px) !important;
-  filter: none !important;
 }
 
 #nav #blog_name a:hover::after,
 #nav #blog-info a:hover::after,
-#nav #blog-info #site-name:hover::after,
-#nav a#site-name:hover::after,
 #nav #site-name:hover::after,
 #blog_name a:hover::after,
 #site-name:hover::after {

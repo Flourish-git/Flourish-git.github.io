@@ -839,6 +839,11 @@ pre {
   line-height: 1.25 !important;
   letter-spacing: 0.8px !important;
 
+  /* ✅ 新增：添加字间距和内边距，拉开视觉距离 */
+  letter-spacing: 1.2px !important; /* 可根据需要调整（如1px、1.5px） */
+  padding: 0 4px !important;       /* 左右内边距，避免文字贴边 */
+
+
   color: #ffffff !important;
   background: none !important;
   -webkit-background-clip: initial !important;
@@ -863,6 +868,10 @@ html[data-theme="dark"] #site-name {
   color: transparent !important;
 
   text-shadow: none !important;
+
+  padding: 0 5px !important; /* 给渐变文字左右留空间 */
+  box-sizing: border-box !important;
+  min-width: fit-content !important; /* 确保宽度适应内容 */
 }
 
 /* ===== 底部细光线：默认模式 ===== */
@@ -1293,3 +1302,4 @@ html[data-theme="dark"] #site-name::after {
 [data-theme='dark'] #nav .menus_items .menus_item > a.site-page.active i {
   color: #ffffff !important;
 }
+

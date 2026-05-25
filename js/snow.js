@@ -1,5 +1,9 @@
 (function () {
   function initSnow() {
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+
     const header = document.querySelector('#page-header');
     if (!header) return;
 

@@ -745,6 +745,38 @@ blockquote {
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
 }
 
+/* Category archive typography */
+#page-header #page-site-info #site-title,
+#body-wrap.page #category,
+#body-wrap.page #category .article-sort,
+#body-wrap.page #category .article-sort-title,
+#body-wrap.page #category .article-sort-item,
+#body-wrap.page #category .article-sort-item-title,
+#body-wrap.page #category .article-sort-item-time,
+#body-wrap.page #category .article-sort-item-time time {
+  font-family: "Shadows Into Light", "华文中宋", "STZhongsong", "Noto Serif SC", "SimSun", serif !important;
+}
+
+#body-wrap.page #category .article-sort-title {
+  color: #4c4f66 !important;
+  font-size: 1.62rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.4px !important;
+}
+
+#body-wrap.page #category .article-sort-item.year {
+  color: #5d6078 !important;
+  font-size: 1.34rem !important;
+  font-weight: 500 !important;
+}
+
+#body-wrap.page #category .article-sort-item-title {
+  color: #565971 !important;
+  font-size: 1.04rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.2px !important;
+}
+
 /* Search dialog */
 #local-search .search-dialog,
 .search-dialog {
@@ -1198,19 +1230,98 @@ html[data-theme="dark"] #site-name::after {
 
   #local-search .search-dialog,
   .search-dialog {
+    top: max(16px, env(safe-area-inset-top)) !important;
+    right: auto !important;
+    bottom: auto !important;
     left: 50% !important;
-    width: min(92vw, 680px) !important;
-    padding: 22px 18px 20px !important;
+    width: calc(100vw - 28px) !important;
+    max-width: 420px !important;
+    max-height: calc(100vh - 32px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+    padding: 20px 16px 18px !important;
+    border-radius: 22px !important;
+    overflow: hidden auto !important;
+    transform: translateX(-50%) !important;
+    box-sizing: border-box !important;
+  }
+
+  #local-search .search-nav,
+  .search-dialog .search-nav {
+    margin-bottom: 14px !important;
+    padding-right: 38px !important;
+  }
+
+  #local-search .search-dialog-title,
+  .search-dialog .search-dialog-title {
+    max-width: calc(100% - 38px) !important;
+    font-size: 1.48rem !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+  }
+
+  #local-search .search-dialog .search-close-button,
+  .search-dialog .search-close-button {
+    top: -2px !important;
+    width: 32px !important;
+    height: 32px !important;
   }
 
   #local-search .local-search-input,
   .search-dialog .local-search-input {
     grid-template-columns: 1fr !important;
+    gap: 0 !important;
+    margin-top: 2px !important;
+  }
+
+  #local-search .local-search-input::before,
+  .search-dialog .local-search-input::before {
+    left: 14px !important;
+    width: 17px !important;
+    height: 17px !important;
   }
 
   #local-search .local-search-input::after,
   .search-dialog .local-search-input::after {
     display: none !important;
+  }
+
+  #local-search .local-search-input input,
+  .search-dialog .local-search-input input {
+    height: 42px !important;
+    min-height: 42px !important;
+    padding-right: 12px !important;
+    padding-left: 40px !important;
+    font-size: 0.95rem !important;
+    box-sizing: border-box !important;
+  }
+
+  #local-search .search-dialog .search-result-list,
+  .search-dialog .search-result-list,
+  #local-search-results {
+    max-height: calc(100vh - 180px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+    margin-top: 10px !important;
+    overflow-y: auto !important;
+  }
+
+  #local-search .search-dialog .search-result-list li,
+  .search-dialog .search-result-list li,
+  #local-search-results .local-search-hit-item {
+    margin: 8px 0 !important;
+    padding: 12px 13px !important;
+    border-radius: 14px !important;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  #local-search .search-dialog,
+  .search-dialog {
+    width: calc(100vw - 20px) !important;
+    padding: 18px 14px 16px !important;
+    border-radius: 20px !important;
+  }
+
+  #local-search .search-dialog-title,
+  .search-dialog .search-dialog-title {
+    font-size: 1.38rem !important;
   }
 }
 

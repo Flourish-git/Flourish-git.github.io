@@ -4,17 +4,19 @@
   
     
     <entry>
-      <title>好习惯</title>
+      <title>好习惯+Bug</title>
       <link href="/2026/06/02/%E5%A5%BD%E4%B9%A0%E6%83%AF/"/>
       <url>/2026/06/02/%E5%A5%BD%E4%B9%A0%E6%83%AF/</url>
       
-        <content type="html"><![CDATA[<h3 id="构建工程"><a href="#构建工程" class="headerlink" title="构建工程"></a>构建工程</h3><p>1、写工程记录版本号，比如project_v1.0这种，搭配一个UpdateLog.txt文件，做了更改就记录在里面，及时更新，这样也好回溯<br>2、汇总一个“疑难杂症”表，遇到一些无法解决（或者说玄学）问题，就记录在里面（如问题描述、问题原因、解决方法），碰到相同问题的时候好做参考</p>]]></content>
+        <content type="html"><![CDATA[<h3 id="习惯"><a href="#习惯" class="headerlink" title="习惯"></a>习惯</h3><p>1、写工程记录版本号，比如project_v1.0这种，搭配一个UpdateLog.txt文件，做了更改就记录在里面，及时更新，这样也好回溯<br>2、汇总一个“疑难杂症”表，遇到一些无法解决（或者说玄学）问题，就记录在里面（如问题描述、问题原因、解决方法），碰到相同问题的时候好做参考</p><h3 id="Bug"><a href="#Bug" class="headerlink" title="Bug"></a>Bug</h3><p>| 时间 | Bug关键点 | 原因 | 解决方法 |<br>| :— | :— | :— |<br>| DTH11 | 设备成功应答，但是数据读取出错 | 读取数据的时序出现问题，采用定时器中断进行1us的延时，但是实际时间远不止1us，导致数据读取时序乱了 | 猜的，原本要延时40us，我猜测20us，歪打正着让时序稳定了 |</p>]]></content>
       
       
       
         <tags>
             
             <tag> 习惯 </tag>
+            
+            <tag> Bug </tag>
             
         </tags>
       

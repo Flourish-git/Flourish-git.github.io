@@ -203,7 +203,8 @@ body::before {
     0 0 38px rgba(175, 201, 255, 0.22) !important;
 }
 
-#body-wrap.type-tags #page-header #site-title {
+#body-wrap.type-tags #page-header #site-title,
+#body-wrap.page:has(#tag) #page-header #site-title {
   color: #fff !important;
   background: none !important;
   background-clip: initial !important;
@@ -2921,7 +2922,8 @@ html[data-theme="dark"] #site-name::after {
       0 0 20px rgba(255, 255, 255, 0.24) !important;
   }
 
-  #body-wrap.type-tags #page-header #site-title {
+  #body-wrap.type-tags #page-header #site-title,
+  #body-wrap.page:has(#tag) #page-header #site-title {
     font-size: clamp(2.55rem, 12vw, 3.35rem) !important;
     letter-spacing: 0.012em !important;
     text-shadow:

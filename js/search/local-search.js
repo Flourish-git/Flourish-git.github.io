@@ -101,17 +101,43 @@ class LocalSearch {
     return result
   }
 
-  getResultItems (keywords) {
+  highlightTerms (value, keywords) {
+    if (!keywords.length) return value
+    const [indexes] = this.getIndexByWord(keywords, value)
+    if (!indexes.length) return value
+    return this.highlightKeyword(value, this.mergeIntoSlice(0, value.length, indexes))
+  }
+
+  getResultItems ({ keywords, tagFilters, categoryFilters, scope }) {
     const resultItems = []
-    this.datas.forEach(({ title, content, url }) => {
-      // The number of different keywords included in the article.
+    this.datas.forEach(({ title, content, url, tags = [], categories = [] }) => {
+      const normalizedTags = tags.map(tag => tag.toLowerCase())
+      const normalizedCategories = categories.map(category => category.toLowerCase())
+      if (!tagFilters.every(tag => normalizedTags.includes(tag))) return
+      if (!categoryFilters.every(category => normalizedCategories.includes(category))) return
+
       const [indexOfTitle, keysOfTitle] = this.getIndexByWord(keywords, title)
       const [indexOfContent, keysOfContent] = this.getIndexByWord(keywords, content)
-      const includedCount = new Set([...keysOfTitle, ...keysOfContent]).size
+      const [indexOfTags, keysOfTags] = this.getIndexByWord(keywords, tags.join(' '))
+      const [indexOfCategories, keysOfCategories] = this.getIndexByWord(keywords, categories.join(' '))
+      const scopeHits = {
+        all: indexOfTitle.length + indexOfContent.length + indexOfTags.length + indexOfCategories.length,
+        article: indexOfTitle.length + indexOfContent.length,
+        tag: indexOfTags.length,
+        category: indexOfCategories.length
+      }
+      const hasFilters = tagFilters.length > 0 || categoryFilters.length > 0
+      if (keywords.length && scopeHits[scope] === 0) return
+      if (!keywords.length && !hasFilters) return
 
-      // Show search results
-      const hitCount = indexOfTitle.length + indexOfContent.length
-      if (hitCount === 0) return
+      const includedCount = new Set([
+        ...keysOfTitle,
+        ...keysOfContent,
+        ...keysOfTags,
+        ...keysOfCategories
+      ]).size
+
+      const hitCount = scopeHits[scope]
 
       const slicesOfTitle = []
       if (indexOfTitle.length !== 0) {
@@ -144,20 +170,36 @@ class LocalSearch {
         slicesOfContent = slicesOfContent.slice(0, upperBound)
       }
 
-      let resultItem = ''
-
       url = new URL(url, location.origin)
-      url.searchParams.append('highlight', keywords.join(' '))
+      if (keywords.length) url.searchParams.append('highlight', keywords.join(' '))
 
+      let resultItem = `<li class="local-search-hit-item"><a href="${url.href}">`
       if (slicesOfTitle.length !== 0) {
-        resultItem += `<li class="local-search-hit-item"><a href="${url.href}"><span class="search-result-title">${this.highlightKeyword(title, slicesOfTitle[0])}</span>`
+        resultItem += `<span class="search-result-title">${this.highlightKeyword(title, slicesOfTitle[0])}</span>`
       } else {
-        resultItem += `<li class="local-search-hit-item"><a href="${url.href}"><span class="search-result-title">${title}</span>`
+        resultItem += `<span class="search-result-title">${title}</span>`
+      }
+
+      if (categories.length || tags.length) {
+        resultItem += '<span class="search-result-meta">'
+        categories.forEach(category => {
+          resultItem += `<span class="search-result-category"><i class="fas fa-folder-open" aria-hidden="true"></i>${this.highlightTerms(category, keywords)}</span>`
+        })
+        tags.forEach(tag => {
+          resultItem += `<span class="search-result-tag"><i class="fas fa-tag" aria-hidden="true"></i>${this.highlightTerms(tag, keywords)}</span>`
+        })
+        resultItem += '</span>'
       }
 
       slicesOfContent.forEach(slice => {
-        resultItem += `<p class="search-result">${this.highlightKeyword(content, slice)}...</p>`
+        const prefix = slice.start > 0 ? '...' : ''
+        const suffix = slice.end < content.length ? '...' : ''
+        resultItem += `<p class="search-result">${prefix}${this.highlightKeyword(content, slice)}${suffix}</p>`
       })
+
+      if (!slicesOfContent.length && content) {
+        resultItem += `<p class="search-result">${content.slice(0, 120)}${content.length > 120 ? '...' : ''}</p>`
+      }
 
       resultItem += '</a></li>'
       resultItems.push({
@@ -187,8 +229,20 @@ class LocalSearch {
         // Only match articles with non-empty titles
         this.datas = this.datas.filter(data => data.title).map(data => {
           data.title = data.title.trim()
-          data.content = data.content ? data.content.trim().replace(/<[^>]+>/g, '') : ''
+          data.content = data.content
+            ? data.content
+                .replace(/<[^>]+>/g, ' ')
+                .replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1')
+                .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+                .replace(/^#{1,6}\s+/gm, '')
+                .replace(/```[^\n]*|```|`/g, ' ')
+                .replace(/[>*_~|]/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim()
+            : ''
           data.url = decodeURIComponent(data.url).replace(/\/{2,}/g, '/')
+          data.tags = Array.isArray(data.tags) ? data.tags.map(tag => String(tag).trim()).filter(Boolean) : []
+          data.categories = Array.isArray(data.categories) ? data.categories.map(category => String(category).trim()).filter(Boolean) : []
           return data
         })
         // Remove loading animation
@@ -247,7 +301,15 @@ window.addEventListener('load', () => {
   const input = document.querySelector('.local-search-input input')
   const statsItem = document.getElementById('local-search-stats')
   const $loadingStatus = document.getElementById('loading-status')
+  const scopeButtons = [...document.querySelectorAll('.local-search-scope-button')]
+  const activeFilters = document.getElementById('local-search-active-filters')
+  const recentSearch = document.getElementById('local-search-recent')
+  const recentSearchList = recentSearch.querySelector('.local-search-recent-list')
+  const recentSearchClear = recentSearch.querySelector('.local-search-recent-clear')
   const isXml = !path.endsWith('json')
+  const recentSearchKey = 'flourish:recent-searches'
+  let currentScope = 'all'
+  let activeResultIndex = -1
 
   // Pagination variables (only initialize if pagination is enabled)
   let currentPage = 0
@@ -270,7 +332,7 @@ window.addEventListener('load', () => {
   // Show/hide search results area
   const toggleResultsVisibility = hasResults => {
     if (enablePagination) {
-      elements.pagination.style.display = hasResults ? '' : 'none'
+      if (!hasResults) elements.pagination.style.display = 'none'
     } else {
       elements.pagination.style.display = 'none'
     }
@@ -304,6 +366,7 @@ window.addEventListener('load', () => {
     })
 
     container.innerHTML = `<ol class="search-result-list">${numberedItems.join('')}</ol>`
+    activeResultIndex = -1
 
     // Update stats
     const displayCount = enablePagination ? currentResultItems.length : resultItems.length
@@ -417,6 +480,9 @@ window.addEventListener('load', () => {
     const container = document.getElementById('local-search-results')
     container.textContent = ''
     statsItem.textContent = ''
+    activeFilters.hidden = true
+    activeFilters.textContent = ''
+    activeResultIndex = -1
     toggleResultsVisibility(false)
     if (enablePagination) {
       currentResultItems = []
@@ -432,6 +498,7 @@ window.addEventListener('load', () => {
     statsDiv.className = 'search-result-stats'
     statsDiv.textContent = languages.hits_empty.replace(/\$\{query}/, searchText)
     statsItem.innerHTML = statsDiv.outerHTML
+    activeResultIndex = -1
     toggleResultsVisibility(false)
     if (enablePagination) {
       currentResultItems = []
@@ -439,22 +506,99 @@ window.addEventListener('load', () => {
     }
   }
 
+  const parseSearchQuery = rawQuery => {
+    const filters = []
+    const remaining = rawQuery.replace(/(?:^|\s)(tag|标签|category|分类):(?:"([^"]+)"|(\S+))/gi, (match, type, quotedValue, plainValue) => {
+      const value = (quotedValue || plainValue || '').trim()
+      if (!value) return match
+      const normalizedType = /^(tag|标签)$/i.test(type) ? 'tag' : 'category'
+      filters.push({ type: normalizedType, value })
+      return ' '
+    })
+    const keywords = remaining
+      .trim()
+      .toLowerCase()
+      .split(/[-\s]+/)
+      .filter(Boolean)
+    return {
+      keywords,
+      tagFilters: filters.filter(filter => filter.type === 'tag').map(filter => filter.value.toLowerCase()),
+      categoryFilters: filters.filter(filter => filter.type === 'category').map(filter => filter.value.toLowerCase()),
+      filters
+    }
+  }
+
+  const renderActiveFilters = filters => {
+    activeFilters.replaceChildren()
+    filters.forEach(filter => {
+      const chip = document.createElement('span')
+      chip.className = `local-search-filter-chip is-${filter.type}`
+      const icon = document.createElement('i')
+      icon.className = filter.type === 'tag' ? 'fas fa-tag' : 'fas fa-folder-open'
+      icon.setAttribute('aria-hidden', 'true')
+      chip.append(icon, document.createTextNode(filter.value))
+      activeFilters.appendChild(chip)
+    })
+    activeFilters.hidden = filters.length === 0
+  }
+
+  const getRecentSearches = () => {
+    try {
+      const value = JSON.parse(localStorage.getItem(recentSearchKey) || '[]')
+      return Array.isArray(value) ? value.filter(item => typeof item === 'string').slice(0, 6) : []
+    } catch (error) {
+      return []
+    }
+  }
+
+  const renderRecentSearches = () => {
+    const searches = getRecentSearches()
+    recentSearchList.replaceChildren()
+    searches.forEach(query => {
+      const button = document.createElement('button')
+      button.type = 'button'
+      button.className = 'local-search-recent-item'
+      button.dataset.recentQuery = query
+      const icon = document.createElement('i')
+      icon.className = 'fas fa-history'
+      icon.setAttribute('aria-hidden', 'true')
+      button.append(icon, document.createTextNode(query))
+      recentSearchList.appendChild(button)
+    })
+    recentSearch.hidden = input.value.trim() !== '' || searches.length === 0
+  }
+
+  const saveRecentSearch = query => {
+    const value = query.trim()
+    if (!value) return
+    const searches = getRecentSearches().filter(item => item !== value)
+    searches.unshift(value)
+    try {
+      localStorage.setItem(recentSearchKey, JSON.stringify(searches.slice(0, 6)))
+    } catch (error) {}
+    renderRecentSearches()
+  }
+
   const inputEventFunction = () => {
     if (!localSearch.isfetched) return
-    let searchText = input.value.trim().toLowerCase()
+    let searchText = input.value.trim()
     isXml && (searchText = searchText.replace(/</g, '&lt;').replace(/>/g, '&gt;'))
+    const query = parseSearchQuery(searchText)
+    query.scope = currentScope
+    renderActiveFilters(query.filters)
+    recentSearch.hidden = searchText !== '' || getRecentSearches().length === 0
 
     if (searchText !== '') $loadingStatus.hidden = false
 
-    const keywords = searchText.split(/[-\s]+/)
     let resultItems = []
 
     if (searchText.length > 0) {
-      resultItems = localSearch.getResultItems(keywords)
+      resultItems = localSearch.getResultItems(query)
     }
 
-    if (keywords.length === 1 && keywords[0] === '') {
+    if (searchText === '') {
       clearSearchResults()
+      renderRecentSearches()
     } else if (resultItems.length === 0) {
       showNoResults(searchText)
     } else {
@@ -478,6 +622,16 @@ window.addEventListener('load', () => {
     $loadingStatus.hidden = true
   }
 
+  const setActiveResult = nextIndex => {
+    const results = [...document.querySelectorAll('#local-search-results .local-search-hit-item')]
+    if (!results.length) return
+    results.forEach(result => result.classList.remove('is-keyboard-active'))
+    activeResultIndex = (nextIndex + results.length) % results.length
+    const activeResult = results[activeResultIndex]
+    activeResult.classList.add('is-keyboard-active')
+    activeResult.scrollIntoView({ block: 'nearest' })
+  }
+
   let loadFlag = false
   const $searchMask = document.getElementById('search-mask')
   const $searchDialog = document.querySelector('#local-search .search-dialog')
@@ -494,6 +648,7 @@ window.addEventListener('load', () => {
     btf.animateIn($searchMask, 'to_show 0.5s')
     btf.animateIn($searchDialog, 'titleScale 0.5s')
     setTimeout(() => { input.focus() }, 300)
+    renderRecentSearches()
     if (!loadFlag) {
       !localSearch.isfetched && localSearch.fetchData()
       input.addEventListener('input', inputEventFunction)
@@ -523,12 +678,65 @@ window.addEventListener('load', () => {
   }
 
   const searchFnOnce = () => {
-    document.querySelector('#local-search .search-close-button').addEventListener('click', closeSearch)
     $searchMask.addEventListener('click', closeSearch)
     if (GLOBAL_CONFIG.localSearch.preload) {
       localSearch.fetchData()
     }
     localSearch.highlightSearchWords(document.getElementById('article-container'))
+
+    scopeButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        currentScope = button.dataset.searchScope
+        scopeButtons.forEach(item => {
+          const isActive = item === button
+          item.classList.toggle('is-active', isActive)
+          item.setAttribute('aria-selected', String(isActive))
+        })
+        inputEventFunction()
+        input.focus()
+      })
+    })
+
+    recentSearchList.addEventListener('click', event => {
+      const button = event.target.closest('[data-recent-query]')
+      if (!button) return
+      input.value = button.dataset.recentQuery
+      inputEventFunction()
+      input.focus()
+    })
+
+    recentSearchClear.addEventListener('click', () => {
+      try {
+        localStorage.removeItem(recentSearchKey)
+      } catch (error) {}
+      renderRecentSearches()
+      input.focus()
+    })
+
+    input.addEventListener('keydown', event => {
+      if (event.key === 'ArrowDown') {
+        event.preventDefault()
+        setActiveResult(activeResultIndex + 1)
+      } else if (event.key === 'ArrowUp') {
+        event.preventDefault()
+        setActiveResult(activeResultIndex <= 0 ? -1 : activeResultIndex - 1)
+      } else if (event.key === 'Enter') {
+        const results = [...document.querySelectorAll('#local-search-results .local-search-hit-item')]
+        if (!results.length) return
+        event.preventDefault()
+        if (activeResultIndex < 0) setActiveResult(0)
+        const activeResult = results[activeResultIndex < 0 ? 0 : activeResultIndex]
+        const link = activeResult.querySelector('a')
+        if (link) {
+          saveRecentSearch(input.value)
+          link.click()
+        }
+      }
+    })
+
+    document.getElementById('local-search-results').addEventListener('click', event => {
+      if (event.target.closest('.local-search-hit-item a')) saveRecentSearch(input.value)
+    })
 
     // Pagination event delegation - only add if pagination is enabled
     if (enablePagination) {
@@ -547,12 +755,14 @@ window.addEventListener('load', () => {
 
     // Initial state
     toggleResultsVisibility(false)
+    renderRecentSearches()
   }
 
   window.addEventListener('search:loaded', () => {
     const $loadDataItem = document.getElementById('loading-database')
     $loadDataItem.nextElementSibling.style.visibility = 'visible'
     $loadDataItem.remove()
+    if (input.value.trim()) inputEventFunction()
   })
 
   searchClickFn()
